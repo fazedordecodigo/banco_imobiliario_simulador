@@ -1,4 +1,5 @@
-from models import Tabuleiro, Jogador, Propriedade
+from models import Tabuleiro, Propriedade
+
 
 class Configuracao:
     def __init__(self) -> None:
