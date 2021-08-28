@@ -1,5 +1,7 @@
-from banco_imobiliario import __version__
+from unittest import TestCase
 
 
-def test_version():
-    assert __version__ == '0.1.0'
+class TestBancoImobiliario(TestCase):
+
+    def test_tabuleiro_deve_existir(self):
+        pass

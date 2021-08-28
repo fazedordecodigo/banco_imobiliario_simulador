@@ -1,12 +1,26 @@
 from abc import abstractmethod
+from functools import reduce
 from enum import Enum
-import random
+import random, operator
 
 
 class Vencedor:
     def __init__(self, rodada, jogador) -> None:
         self._rodada = rodada
         self._jogador = jogador
+
+    def retorna_jogador(self) -> object:
+        return self._jogador
+
+    def retorna_tipo_jogador(self) -> int:
+        tipo = self._jogador.retorna_tipo()
+        return tipo.value
+
+    def retorna_rodada(self) -> int:
+        return self._rodada
+
+    def __str__(self):
+        return f'Vencedor( Tipo: {self._jogador}, Rodada: {self._rodada} )'
 
 
 class Resultado:
@@ -15,6 +29,42 @@ class Resultado:
 
     def adicionar_vencedor(self, vencedor: Vencedor):
         self._vencedores.append(vencedor)
+
+    def partidas_time_out(self) -> list:
+        resultado = list(filter(lambda x: x.retorna_rodada() == 1000, self._vencedores))
+        return list([str(x) for x in resultado])
+
+    def qtd_partidas_time_out(self) -> int:
+        partidas = self.partidas_time_out()
+        return len(partidas)
+
+    def media_turnos(self) -> int:
+        lista = list([x.retorna_rodada() for x in self._vencedores])
+        return round(reduce(lambda x, y: x + y, lista) / len(lista), 2)
+
+    def percentual_vitoria_por_comportamento(self) -> dict:
+        total = len(self._vencedores)
+        vitorias = {}
+        for tipo in ETipoJogador:
+            vitorias[tipo.name] = round((len(
+                list(
+                    filter(
+                        lambda x: x.retorna_tipo_jogador() == tipo.value, self._vencedores)
+                )
+            ) * 100) / total)
+        return vitorias
+
+    def maior_vitorioso(self):
+        resultado = self.percentual_vitoria_por_comportamento()
+        return max(resultado.items(), key=operator.itemgetter(1))[0]
+
+    def exibir(self):
+        print(
+            f'Resultados:\nPartidas que terminaram por time out: {self.qtd_partidas_time_out()}\n' +
+            f'Média de Turnos por Partida: {self.media_turnos()}\n' +
+            f'Percentual de vitórias por comportamento dos jogadores: {self.percentual_vitoria_por_comportamento()}\n' +
+            f'Comportamento com maior número de Vitórias: {self.maior_vitorioso()}'
+        )
 
 
 class Propriedade:
@@ -113,7 +163,6 @@ class Jogador:
     def retorna_em_jogo(self):
         return self._em_jogo
 
-
     def desclassificar(self) -> bool:
         if self._saldo < 0:
             self._em_jogo = False
@@ -138,18 +187,27 @@ class Jogador:
     def _pagar(self, propriedade: Propriedade):
         self._saldo -= propriedade.retornar_valor_aluguel()
         proprietario = propriedade.retornar_proprietario()
-        proprietario._receber(propriedade.retornar_valor_aluguel())
+        proprietario.receber(propriedade.retornar_valor_aluguel())
     
-    def _receber(self, valor: int):
+    def receber(self, valor: int):
         self._saldo += valor
 
     def devolver_propriedades(self):
-        propriedades = list(filter(lambda x : x in self._propriedades, self._tabuleiro.retornar_todas_propriedades()))
+        propriedades = \
+            list(
+                filter(
+                    lambda x: x in self._propriedades,
+                    self._tabuleiro.retornar_todas_propriedades()
+                )
+            )
 
         for propriedade in propriedades:
             propriedade.definir_disponivel_mercado()
 
         self._propriedades = []
+
+    def retorna_tipo(self) -> Enum:
+        return self._tipo
     
     def __str__(self):
         return f'Jogador( Tipo: {self._tipo.name}, Saldo: {self._saldo}, Em fogo? {self._em_jogo} )'
@@ -167,7 +225,6 @@ class Impulsivo(Jogador):
 
         if self.desclassificar():
             self.devolver_propriedades()
-
 
 
 class Exigente(Jogador):

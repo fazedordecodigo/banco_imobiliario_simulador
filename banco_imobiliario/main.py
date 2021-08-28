@@ -11,26 +11,27 @@ def handler():
         dado = Dado()
 
         jogadores = [
-            Impulsivo(tabuleiro), Exigente(tabuleiro), Cauteloso(tabuleiro), Aleatorio(tabuleiro)
+            Impulsivo(tabuleiro), Exigente(tabuleiro),
+            Cauteloso(tabuleiro), Aleatorio(tabuleiro)
         ]
 
         tabuleiro.adicionar_jogadores(jogadores)
         
         for rodada in range(1, 1001):
-            if tabuleiro.retorna_qtd_jogadores() > 1:
-                for jogador in jogadores:
-                    if jogador.retorna_em_jogo():
-                        casa = jogador.avancar_casas(dado.sortear())
-                        propriedade = tabuleiro.retornar_propriedade(casa)
-                        jogador.analisar(propriedade)
-                        #print(f"Simulação: {simulacao}, Rodada: {rodada}, {str(jogador)}")
-            else:
+            if tabuleiro.retorna_qtd_jogadores() <= 1:
                 break
-        resultado.adicionar_vencedor(
-            Vencedor(rodada, tabuleiro.retornar_vencedor()))
-            
-    print(resultado)
 
+            for jogador in jogadores:
+                if jogador.retorna_em_jogo():
+                    casa = jogador.avancar_casas(dado.sortear())
+                    propriedade = tabuleiro.retornar_propriedade(casa)
+                    jogador.analisar(propriedade)
+
+        resultado.adicionar_vencedor(
+            Vencedor(rodada, tabuleiro.retornar_vencedor())
+        )
+            
+    resultado.exibir()
 
 
 if __name__ == '__main__':
