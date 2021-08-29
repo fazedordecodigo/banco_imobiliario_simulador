@@ -1,7 +1,8 @@
 from abc import abstractmethod
 from functools import reduce
 from enum import Enum
-import random, operator
+import random
+import operator
 
 
 class Vencedor:

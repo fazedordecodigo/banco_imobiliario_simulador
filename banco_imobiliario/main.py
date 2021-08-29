@@ -1,5 +1,5 @@
 from config import Configuracao
-from models import Impulsivo, Exigente, Cauteloso, Aleatorio, Dado, Vencedor, Resultado
+from models import Vencedor, Resultado
 
 
 def handler():
@@ -8,14 +8,8 @@ def handler():
     for simulacao in range(1, 301):
         configuracao = Configuracao()
         tabuleiro = configuracao.montar_tabuleiro()
-        dado = Dado()
-
-        jogadores = [
-            Impulsivo(tabuleiro), Exigente(tabuleiro),
-            Cauteloso(tabuleiro), Aleatorio(tabuleiro)
-        ]
-
-        tabuleiro.adicionar_jogadores(jogadores)
+        dado = configuracao.retorna_dado()
+        jogadores = configuracao.retorna_jogadores()
         
         for rodada in range(1, 1001):
             if tabuleiro.retorna_qtd_jogadores() <= 1:
