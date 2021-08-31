@@ -73,6 +73,6 @@ Uma execução do programa proposto deve rodar 300 simulações, imprimindo no c
 
 - Instale o Poetry `pip install poetry`
 
-- Instale as depêndencias deste projeto `poetry init`
+- Instale as depêndencias deste projeto `poetry install`
 
 Run!

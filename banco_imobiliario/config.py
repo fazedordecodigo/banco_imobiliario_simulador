@@ -1,4 +1,4 @@
-from banco_imobiliario.models import Propriedade, Tabuleiro, Dado, Impulsivo, Exigente, Cauteloso, Aleatorio
+from banco_imobiliario.entidades import Propriedade, Tabuleiro, Dado, Impulsivo, Exigente, Cauteloso, Aleatorio
 
 
 class Configuracao:

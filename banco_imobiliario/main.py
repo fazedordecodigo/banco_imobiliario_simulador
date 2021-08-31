@@ -1,5 +1,5 @@
 from config import Configuracao
-from models import Vencedor, Resultado
+from entidades import Vencedor, Resultado
 
 
 def handler():

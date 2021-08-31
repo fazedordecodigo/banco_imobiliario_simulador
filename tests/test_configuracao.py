@@ -1,10 +1,9 @@
 from banco_imobiliario.config import Configuracao
-from banco_imobiliario.models import Tabuleiro, Dado, Impulsivo, Cauteloso, Exigente, Aleatorio
-from unittest import TestCase
+from banco_imobiliario.entidades import Tabuleiro, Dado, Impulsivo, Cauteloso, Exigente, Aleatorio
 import unittest
 
 
-class TestConfiguracao(TestCase):
+class TestConfiguracao(unittest.TestCase):
 
     def setUp(self) -> None:
         self.configuracao = Configuracao()
@@ -37,7 +36,8 @@ class TestConfiguracao(TestCase):
 
         self.assertListEqual(
             list(map(vars, jogadores_esperado)),
-            list(map(vars, jogadores))
+            list(map(vars, jogadores)),
+            'retorna_jogadores não retorna lista de Jogadores'
         )
 
 
